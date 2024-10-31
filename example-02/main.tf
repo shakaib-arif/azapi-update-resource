@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azapi = {
       source  = "azure/azapi"
-      version = ">= 1.12.0"
+      version = "~> 1.12.0"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -12,7 +12,7 @@ terraform {
 }
 
 module "azapi" {
-  source = "./azapi"
+  source = "../azapi-update-resource"
 
   update_resource_params = {
     update_01 = {
@@ -21,7 +21,7 @@ module "azapi" {
       resource_id = azurerm_lb.this.id
       type        = "Microsoft.Network/loadBalancers@2023-04-01"
 
-      body = {
+      body = jsonencode({
         properties = {
           inboundNatRules = [
             {
@@ -31,7 +31,7 @@ module "azapi" {
             }
           ]
         }
-      }
+      })
 
       response_export_values  = null
       locks                   = null
